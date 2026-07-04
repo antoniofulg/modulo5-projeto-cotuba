@@ -1,5 +1,8 @@
 package br.com.unipds;
 
+import jakarta.enterprise.inject.se.SeContainer;
+import jakarta.enterprise.inject.se.SeContainerInitializer;
+
 public class Main {
 
     void main(String[] args) {
@@ -10,15 +13,15 @@ public class Main {
     }
 
     int executar(String[] args) {
-        boolean verboseMode = false;
+        boolean verboseMode = true;
 
-        try {
-            var cliOptionsReader = new CLIOptionsReader();
+        try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
+            var cliOptionsReader = container.select(CLIOptionsReader.class).get();
             CortubaParameters cortubaParameters = cliOptionsReader.read(args);
 
             verboseMode = cortubaParameters.isVerboseMode();
 
-            CortubaService cortubaService = new CortubaService();
+            CortubaService cortubaService = container.select(CortubaService.class).get();
             cortubaService.execute(cortubaParameters);
 
             System.out.println("Arquivo gerado com sucesso: " + cortubaParameters.getOutputFile());

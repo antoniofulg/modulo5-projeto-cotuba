@@ -15,8 +15,14 @@ import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.IElement;
 import com.itextpdf.layout.properties.AreaBreakType;
 
-public class PDFGenerator {
-    public void generatePDF(Ebook ebook) {
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+
+@ApplicationScoped
+@Named("PDFGenerator")
+public class PDFGenerator implements EbookGenerator {
+    @Override
+    public void generate(Ebook ebook) {
         List<Chapter> chapters = ebook.getChapters();
         Path outputFile = ebook.getOutputFile();
 

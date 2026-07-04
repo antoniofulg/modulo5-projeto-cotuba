@@ -11,6 +11,8 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import nl.siegmann.epublib.domain.Author;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.GuideReference;
@@ -18,8 +20,10 @@ import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.epub.EpubWriter;
 import nl.siegmann.epublib.service.MediatypeService;
 
-public class EPUBGenerator {
-    public void generateEPUB(Ebook ebook) {
+@ApplicationScoped
+@Named("EPUBGenerator")
+public class EPUBGenerator implements EbookGenerator {
+    public void generate(Ebook ebook) {
         List<Chapter> chapters = ebook.getChapters();
         Path outputFile = ebook.getOutputFile();
 

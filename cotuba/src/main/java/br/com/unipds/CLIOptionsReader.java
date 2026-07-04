@@ -15,6 +15,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.help.HelpFormatter;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class CLIOptionsReader {
     public CortubaParameters read(String[] args) {
         var options = new Options();
