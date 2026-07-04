@@ -16,12 +16,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.help.HelpFormatter;
 
 public class CLIOptionsReader {
-    private Path mdFilePath;
-    private EbookFormat format;
-    private Path outputFile;
-    private boolean verboseMode = false;
-
-    public void read(String[] args) {
+    public CortubaParameters read(String[] args) {
         var options = new Options();
 
         var mdFilePathOption = new Option("d", "dir", true,
@@ -52,67 +47,69 @@ public class CLIOptionsReader {
             } catch (IOException ioe) {
                 e.addSuppressed(ioe);
             }
-            throw new IllegalArgumentException(e.getMessage(), e);
+            throw new IllegalStateException(e);
         }
 
-        String mdPathName = cmd.getOptionValue("dir");
-
-        if (mdPathName != null) {
-            mdFilePath = Paths.get(mdPathName);
-            if (!Files.isDirectory(mdFilePath)) {
-                throw new IllegalArgumentException(mdPathName + " não é um diretório.");
-            }
-        } else {
-            Path currentPath = Paths.get("");
-            mdFilePath = currentPath;
-        }
-
-        String ebookFormat = cmd.getOptionValue("format");
-
-        if (ebookFormat != null) {
-            try {
-                format = EbookFormat.valueOf(ebookFormat.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Formato do ebook inválido: " + ebookFormat, e);
-            }
-        } else {
-            format = EbookFormat.PDF;
-        }
-
-        String ebookOutputFileName = cmd.getOptionValue("output");
-        if (ebookOutputFileName != null) {
-            outputFile = Paths.get(ebookOutputFileName);
-        } else {
-            outputFile = Paths.get("book." + format.name().toLowerCase());
-        }
         try {
-            if (Files.isDirectory(outputFile)) {
-                // deleta arquivos do diretório recursivamente
-                Files.walk(outputFile).sorted(Comparator.reverseOrder())
-                        .map(Path::toFile).forEach(File::delete);
+            Path mdFilePath;
+            EbookFormat format;
+            Path outputFile;
+            boolean verboseMode = true;
+
+            CortubaParameters cortubaParameters = new CortubaParameters();
+
+            String mdPathName = cmd.getOptionValue("dir");
+
+            if (mdPathName != null) {
+                mdFilePath = Paths.get(mdPathName);
+                if (!Files.isDirectory(mdFilePath)) {
+                    throw new IllegalArgumentException(mdPathName + " não é um diretório.");
+                }
             } else {
-                Files.deleteIfExists(outputFile);
+                Path currentPath = Paths.get("");
+                mdFilePath = currentPath;
             }
-        } catch (IOException e) {
-            throw new IllegalStateException("Erro ao preparar arquivo de saída: " + outputFile.toAbsolutePath(), e);
+
+            String ebookFormat = cmd.getOptionValue("format");
+
+            if (ebookFormat != null) {
+                try {
+                    format = EbookFormat.valueOf(ebookFormat.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Formato do ebook inválido: " + ebookFormat, e);
+                }
+            } else {
+                format = EbookFormat.PDF;
+            }
+
+            String ebookOutputFileName = cmd.getOptionValue("output");
+            if (ebookOutputFileName != null) {
+                outputFile = Paths.get(ebookOutputFileName);
+            } else {
+                outputFile = Paths.get("book." + format.name().toLowerCase());
+            }
+            try {
+                if (Files.isDirectory(outputFile)) {
+                    // deleta arquivos do diretório recursivamente
+                    Files.walk(outputFile).sorted(Comparator.reverseOrder())
+                            .map(Path::toFile).forEach(File::delete);
+                } else {
+                    Files.deleteIfExists(outputFile);
+                }
+            } catch (IOException e) {
+                throw new IllegalStateException("Erro ao preparar arquivo de saída: " + outputFile.toAbsolutePath(), e);
+            }
+
+            verboseMode = cmd.hasOption("verbose");
+
+            cortubaParameters.setMdFilePath(mdFilePath);
+            cortubaParameters.setFormat(format);
+            cortubaParameters.setOutputFile(outputFile);
+            cortubaParameters.setVerboseMode(verboseMode);
+
+            return cortubaParameters;
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
-
-        verboseMode = cmd.hasOption("verbose");
-    }
-
-    public Path getMdFilePath() {
-        return mdFilePath;
-    }
-
-    public EbookFormat getFormat() {
-        return format;
-    }
-
-    public Path getOutputFile() {
-        return outputFile;
-    }
-
-    public boolean isVerboseMode() {
-        return verboseMode;
     }
 }

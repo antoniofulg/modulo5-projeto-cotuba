@@ -13,33 +13,36 @@ import nl.siegmann.epublib.epub.EpubWriter;
 import nl.siegmann.epublib.service.MediatypeService;
 
 public class EPUBGenerator {
-    public void generateEPUB(List<String> htmlList, Path outputFile) {
+    public void generateEPUB(Ebook ebook) {
+        List<Chapter> chapters = ebook.getChapters();
+        Path outputFile = ebook.getOutputFile();
+
         try {
             var epub = new Book();
 
-            // TODO: definir título e autor para o livro
-            epub.getMetadata().addTitle("Livro");
-            epub.getMetadata().addAuthor(new Author("Autor"));
+            epub.getMetadata().addTitle(ebook.getTitle());
+            epub.getMetadata().addAuthor(new Author(ebook.getAuthor()));
 
             boolean[] isFirstChapter = { true };
 
-            htmlList.forEach(html -> {
-                // TODO: usar título do capítulo
+            chapters.forEach(chapter -> {
+                String html = chapter.getHtml();
+                String title = chapter.getTitle();
                 String epubHtml = """
                           <html xmlns="http://www.w3.org/1999/xhtml">
                             <head>
-                              <title>Capítulo</title>
+                              <title>%s</title>
                             </head>
                             <body>
                               %s
                             </body>
                           </html>
-                        """.formatted(html);
-                var chapter = new Resource(epubHtml.getBytes(), MediatypeService.XHTML);
-                epub.addSection("Capítulo", chapter);
+                        """.formatted(title, html);
+                var epubChapter = new Resource(epubHtml.getBytes(), MediatypeService.XHTML);
+                epub.addSection("Capítulo", epubChapter);
 
                 if (isFirstChapter[0]) {
-                    epub.getGuide().addReference(new GuideReference(chapter, "text", "Start Reading"));
+                    epub.getGuide().addReference(new GuideReference(epubChapter, "text", "Start Reading"));
                     isFirstChapter[0] = false;
                 }
             });
