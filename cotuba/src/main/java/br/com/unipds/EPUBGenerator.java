@@ -1,9 +1,15 @@
 package br.com.unipds;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import nl.siegmann.epublib.domain.Author;
 import nl.siegmann.epublib.domain.Book;
@@ -28,17 +34,39 @@ public class EPUBGenerator {
             chapters.forEach(chapter -> {
                 String html = chapter.getHtml();
                 String title = chapter.getTitle();
-                String epubHtml = """
-                          <html xmlns="http://www.w3.org/1999/xhtml">
-                            <head>
-                              <title>%s</title>
-                            </head>
-                            <body>
-                              %s
-                            </body>
-                          </html>
-                        """.formatted(title, html);
-                var epubChapter = new Resource(epubHtml.getBytes(), MediatypeService.XHTML);
+
+                StringWriter stringWriter = new StringWriter();
+                try {
+                    XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+                    XMLStreamWriter xmlWriter = xmlOutputFactory.createXMLStreamWriter(stringWriter);
+
+                    xmlWriter.writeStartDocument("UTF-8", "1.0");
+                    xmlWriter.writeStartElement("html");
+                    xmlWriter.writeDefaultNamespace("http://www.w3.org/1999/xhtml");
+
+                    xmlWriter.writeStartElement("head");
+                    xmlWriter.writeStartElement("title");
+                    xmlWriter.writeCharacters(title);
+                    xmlWriter.writeEndElement();
+                    xmlWriter.writeEndElement();
+
+                    xmlWriter.writeStartElement("body");
+                    // writeCharacters would escape HTML tags; flush and write the fragment as-is
+                    xmlWriter.writeCharacters("");
+                    xmlWriter.flush();
+                    stringWriter.write(html);
+                    xmlWriter.writeEndElement();
+
+                    xmlWriter.writeEndElement();
+                    xmlWriter.writeEndDocument();
+                    xmlWriter.close();
+                } catch (XMLStreamException e) {
+                    throw new IllegalStateException("Erro ao gerar XML do capítulo: " + title, e);
+                }
+
+                var epubChapter = new Resource(
+                        stringWriter.toString().getBytes(StandardCharsets.UTF_8),
+                        MediatypeService.XHTML);
                 epub.addSection("Capítulo", epubChapter);
 
                 if (isFirstChapter[0]) {
