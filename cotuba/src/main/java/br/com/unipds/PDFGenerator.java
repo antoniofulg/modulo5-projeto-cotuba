@@ -16,17 +16,20 @@ import com.itextpdf.layout.element.IElement;
 import com.itextpdf.layout.properties.AreaBreakType;
 
 public class PDFGenerator {
-    public void generatePDF(List<String> htmlList, Path outputFile) {
+    public void generatePDF(Ebook ebook) {
+        List<Chapter> chapters = ebook.getChapters();
+        Path outputFile = ebook.getOutputFile();
+
         try (var writer = new PdfWriter(Files.newOutputStream(outputFile));
                 var pdf = new PdfDocument(writer);
                 var pdfDocument = new Document(pdf)) {
 
-            // TODO: definir título e autor para o livro
-            pdf.getDocumentInfo().setTitle("Livro");
-            pdf.getDocumentInfo().setAuthor("Autor");
+            pdf.getDocumentInfo().setTitle(ebook.getTitle());
+            pdf.getDocumentInfo().setAuthor(ebook.getAuthor());
 
-            htmlList.forEach(html -> {
+            chapters.forEach(chapter -> {
 
+                String html = chapter.getHtml();
                 List<IElement> convertToElements = HtmlConverter.convertToElements(html);
 
                 if (pdf.getNumberOfPages() == 0) {
@@ -38,8 +41,7 @@ public class PDFGenerator {
                     rootOutline = pdf.getOutlines(false);
                 }
 
-                // TODO: usar título do capítulo
-                PdfOutline chapterOutline = rootOutline.addOutline("Capítulo");
+                PdfOutline chapterOutline = rootOutline.addOutline(chapter.getTitle());
                 chapterOutline.addDestination(PdfExplicitDestination.createFit(pdf.getLastPage()));
 
                 for (IElement element : convertToElements) {
