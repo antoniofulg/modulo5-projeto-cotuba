@@ -20,19 +20,19 @@ public class Main {
             cliOptionsReader.read(args);
 
             Path mdFilePath = cliOptionsReader.getMdFilePath();
-            String format = cliOptionsReader.getFormat();
+            EbookFormat format = cliOptionsReader.getFormat();
             Path outputFile = cliOptionsReader.getOutputFile();
             verboseMode = cliOptionsReader.isVerboseMode();
 
             var markdownRender = new MarkdownRender();
             List<String> htmlList = markdownRender.render(mdFilePath);
 
-            if ("pdf".equals(format)) {
+            if (EbookFormat.PDF.equals(format)) {
 
                 var pdfGenerator = new PDFGenerator();
                 pdfGenerator.generatePDF(htmlList, outputFile);
 
-            } else if ("epub".equals(format)) {
+            } else if (EbookFormat.EPUB.equals(format)) {
 
                 var epubGenerator = new EPUBGenerator();
                 epubGenerator.generateEPUB(htmlList, outputFile);
@@ -44,11 +44,7 @@ public class Main {
             return 0;
 
         } catch (Exception ex) {
-            Throwable root = ex;
-            while (root.getCause() != null) {
-                root = root.getCause();
-            }
-            System.err.println(root.getMessage() != null ? root.getMessage() : ex.getMessage());
+            System.err.println(ex.getMessage());
             if (verboseMode) {
                 System.err.println();
                 ex.printStackTrace();

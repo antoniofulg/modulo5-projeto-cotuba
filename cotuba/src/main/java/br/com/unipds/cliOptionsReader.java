@@ -17,7 +17,7 @@ import org.apache.commons.cli.help.HelpFormatter;
 
 public class CLIOptionsReader {
     private Path mdFilePath;
-    private String format;
+    private EbookFormat format;
     private Path outputFile;
     private boolean verboseMode = false;
 
@@ -70,16 +70,20 @@ public class CLIOptionsReader {
         String ebookFormat = cmd.getOptionValue("format");
 
         if (ebookFormat != null) {
-            format = ebookFormat.toLowerCase();
+            try {
+                format = EbookFormat.valueOf(ebookFormat.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Formato do ebook inválido: " + ebookFormat, e);
+            }
         } else {
-            format = "pdf";
+            format = EbookFormat.PDF;
         }
 
         String ebookOutputFileName = cmd.getOptionValue("output");
         if (ebookOutputFileName != null) {
             outputFile = Paths.get(ebookOutputFileName);
         } else {
-            outputFile = Paths.get("book." + format.toLowerCase());
+            outputFile = Paths.get("book." + format.name().toLowerCase());
         }
         try {
             if (Files.isDirectory(outputFile)) {
@@ -100,7 +104,7 @@ public class CLIOptionsReader {
         return mdFilePath;
     }
 
-    public String getFormat() {
+    public EbookFormat getFormat() {
         return format;
     }
 
@@ -110,5 +114,5 @@ public class CLIOptionsReader {
 
     public boolean isVerboseMode() {
         return verboseMode;
-    }    
+    }
 }
