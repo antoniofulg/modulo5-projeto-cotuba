@@ -19,12 +19,12 @@ public class Main {
             var cliOptionsReader = container.select(CLIOptionsReader.class).get();
             CortubaParameters cortubaParameters = cliOptionsReader.read(args);
 
-            verboseMode = cortubaParameters.isVerboseMode();
+            verboseMode = cortubaParameters.verboseMode();
 
             CortubaService cortubaService = container.select(CortubaService.class).get();
             cortubaService.execute(cortubaParameters);
 
-            System.out.println("Arquivo gerado com sucesso: " + cortubaParameters.getOutputFile());
+            System.out.println("Arquivo gerado com sucesso: " + cortubaParameters.outputFile());
             return 0;
 
         } catch (Exception ex) {

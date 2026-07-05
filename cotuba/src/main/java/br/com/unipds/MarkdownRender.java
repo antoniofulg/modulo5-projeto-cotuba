@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface MarkdownRender {
 
-    void render(List<Chapter> chapters);
+    List<Chapter> render(List<Markdown> chapters);
 
 }

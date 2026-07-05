@@ -27,23 +27,21 @@ public class CortubaService {
 
     public void execute(CortubaParameters cortubaParameters) {
 
-        Path mdFilePath = cortubaParameters.getMdFilePath();
+        Path mdFilePath = cortubaParameters.mdFilePath();
 
-        List<Chapter> chapters = markdownsRepository.find(mdFilePath);
+        List<Markdown> markdowns = markdownsRepository.find(mdFilePath);
 
-        markdownRender.render(chapters);
+        List<Chapter> chapters = markdownRender.render(markdowns);
 
-        EbookFormat format = cortubaParameters.getFormat();
+        EbookFormat format = cortubaParameters.format();
 
-        Ebook ebook = new Ebook();
+        EbookProperties ebookProperties = ebookPropertiesReader.read(cortubaParameters.mdFilePath());
 
-        ebookPropertiesReader.read(cortubaParameters.getMdFilePath(), ebook);
+        Ebook ebook = EbookBuilder.builder().chapters(chapters).format(format)
+                .outputFile(cortubaParameters.outputFile()).title(ebookProperties.title())
+                .author(ebookProperties.author()).build();
 
-        ebook.setChapters(chapters);
-        ebook.setFormat(format);
-        ebook.setOutputFile(cortubaParameters.getOutputFile());
-
-        EbookGenerator ebookGenerator = ebookGenerators.select(EbookFormatFilter.of(format)).get();
+        EbookGenerator ebookGenerator = ebookGenerators.select(EbookFormatFilter.of(ebook.format())).get();
 
         ebookGenerator.generate(ebook);
     }

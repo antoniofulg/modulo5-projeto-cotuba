@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface MarkdownsRepository {
 
-    List<Chapter> find(Path mdFilePath);
+    List<Markdown> find(Path mdFilePath);
 
 }

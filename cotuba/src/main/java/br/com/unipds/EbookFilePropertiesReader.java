@@ -12,7 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class EbookFilePropertiesReader implements EbookPropertiesReader {
 
     @Override
-    public void read(Path mdFilePath, Ebook ebook) {
+    public EbookProperties read(Path mdFilePath) {
 
         Path propertiesFile = mdFilePath.resolve("ebook.properties");
 
@@ -35,8 +35,7 @@ public class EbookFilePropertiesReader implements EbookPropertiesReader {
         String author = properties.getProperty(authorProperty);
         validateProperty(author, authorProperty);
 
-        ebook.setTitle(title);
-        ebook.setAuthor(author);
+        return new EbookProperties(title, author);
     }
 
     private void validateProperty(String field, String property) {

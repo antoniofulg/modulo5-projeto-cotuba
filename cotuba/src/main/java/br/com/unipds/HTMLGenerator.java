@@ -16,13 +16,13 @@ public class HTMLGenerator implements EbookGenerator {
 
     @Override
     public void generate(Ebook ebook) {
-        Path outputFile = ebook.getOutputFile();
+        Path outputFile = ebook.outputFile();
         try {
             Path htmlDirectory = Files.createDirectory(outputFile);
 
             int i = 1;
             Map<Chapter, Path> chapterHtmlFile = new LinkedHashMap<>();
-            for (Chapter chapter : ebook.getChapters()) {
+            for (Chapter chapter : ebook.chapters()) {
                 String htmlFileName = getHTMLFileNameChapter(i, chapter);
                 Path htmlFile = htmlDirectory.resolve(htmlFileName);
                 chapterHtmlFile.put(chapter, htmlFile);
@@ -37,11 +37,11 @@ public class HTMLGenerator implements EbookGenerator {
     }
 
     private void writeSummary(Ebook ebook, Path htmlDirectory, Map<Chapter, Path> chapterHtmlFile) throws IOException {
-        String summaryListItems = ebook.getChapters().stream().map(chapter -> """
+        String summaryListItems = ebook.chapters().stream().map(chapter -> """
                     <li>
                         <a href="%s">%s</a>
                     </li>
-                """.formatted(chapterHtmlFile.get(chapter).getFileName(), chapter.getTitle()))
+                """.formatted(chapterHtmlFile.get(chapter).getFileName(), chapter.title()))
                 .collect(Collectors.joining());
 
         String htmlSummary = """
@@ -60,7 +60,7 @@ public class HTMLGenerator implements EbookGenerator {
                         </ul>
                     </body>
                     </html>
-                """.formatted(ebook.getTitle(), ebook.getTitle(), ebook.getAuthor(), summaryListItems);
+                """.formatted(ebook.title(), ebook.title(), ebook.author(), summaryListItems);
         Path indexFile = htmlDirectory.resolve("index.html");
         ;
         Files.writeString(indexFile, htmlSummary, StandardCharsets.UTF_8);
@@ -78,12 +78,12 @@ public class HTMLGenerator implements EbookGenerator {
                         %s
                     </body>
                     </html>
-                """.formatted(chapter.getTitle(), chapter.getHtml());
+                """.formatted(chapter.title(), chapter.html());
         Files.writeString(htmlFile, html, StandardCharsets.UTF_8);
     }
 
     private String getHTMLFileNameChapter(int i, Chapter chapter) {
-        String cleanTitle = chapter.getTitle().toLowerCase().replaceAll("\\W", "");
+        String cleanTitle = chapter.title().toLowerCase().replaceAll("\\W", "");
         return "%02d-%s.html".formatted(i, cleanTitle);
     }
 
