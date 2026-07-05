@@ -4,8 +4,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Any;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 @ApplicationScoped
 public class CortubaService {
@@ -13,20 +14,15 @@ public class CortubaService {
     private final MarkdownRender markdownRender;
     private final EbookPropertiesReader ebookPropertiesReader;
     private final MarkdownsRepository markdownsRepository;
-    private final EbookGenerator epubGenerator;
-    private final EbookGenerator pdfGenerator;
+    private final Instance<EbookGenerator> ebookGenerators;
 
     @Inject
     public CortubaService(MarkdownRender markdownRender, EbookPropertiesReader ebookPropertiesReader,
-            MarkdownsRepository markdownsRepository,
-            @Named("EPUBGenerator") EbookGenerator epubGenerator,
-            @Named("PDFGenerator") EbookGenerator pdfGenerator) {
+            MarkdownsRepository markdownsRepository, @Any Instance<EbookGenerator> ebookGenerators) {
         this.markdownRender = markdownRender;
         this.ebookPropertiesReader = ebookPropertiesReader;
         this.markdownsRepository = markdownsRepository;
-        this.epubGenerator = epubGenerator;
-        this.pdfGenerator = pdfGenerator;
-
+        this.ebookGenerators = ebookGenerators;
     }
 
     public void execute(CortubaParameters cortubaParameters) {
@@ -47,17 +43,8 @@ public class CortubaService {
         ebook.setFormat(format);
         ebook.setOutputFile(cortubaParameters.getOutputFile());
 
-        EbookGenerator ebookGenerator;
-
-        if (EbookFormat.PDF.equals(format)) {
-            ebookGenerator = pdfGenerator;
-        } else if (EbookFormat.EPUB.equals(format)) {
-            ebookGenerator = epubGenerator;
-        } else {
-            throw new IllegalArgumentException("Formato do ebook inválido: " + format);
-        }
+        EbookGenerator ebookGenerator = ebookGenerators.select(EbookFormatFilter.of(format)).get();
 
         ebookGenerator.generate(ebook);
-
     }
 }
