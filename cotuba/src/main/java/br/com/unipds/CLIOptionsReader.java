@@ -19,7 +19,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class CLIOptionsReader {
-    public CortubaParameters read(String[] args) {
+    public CotubaParameters read(String[] args) {
         var options = new Options();
 
         var mdFilePathOption = new Option("d", "dir", true,
@@ -103,7 +103,7 @@ public class CLIOptionsReader {
 
             verboseMode = cmd.hasOption("verbose");
 
-            return new CortubaParameters(mdFilePath, format, outputFile, verboseMode);
+            return new CotubaParameters(mdFilePath, format, outputFile, verboseMode);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }

@@ -17,14 +17,14 @@ public class Main {
 
         try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
             var cliOptionsReader = container.select(CLIOptionsReader.class).get();
-            CortubaParameters cortubaParameters = cliOptionsReader.read(args);
+            CotubaParameters cotubaParameters = cliOptionsReader.read(args);
 
-            verboseMode = cortubaParameters.verboseMode();
+            verboseMode = cotubaParameters.verboseMode();
 
-            CortubaService cortubaService = container.select(CortubaService.class).get();
-            cortubaService.execute(cortubaParameters);
+            CotubaService cotubaService = container.select(CotubaService.class).get();
+            cotubaService.execute(cotubaParameters);
 
-            System.out.println("Arquivo gerado com sucesso: " + cortubaParameters.outputFile());
+            System.out.println("Arquivo gerado com sucesso: " + cotubaParameters.outputFile());
             return 0;
 
         } catch (Exception ex) {
