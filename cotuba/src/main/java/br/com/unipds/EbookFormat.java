@@ -1,5 +1,5 @@
 package br.com.unipds;
 
 public enum EbookFormat {
-    PDF, EPUB;
+    PDF, EPUB, HTML;
 }
