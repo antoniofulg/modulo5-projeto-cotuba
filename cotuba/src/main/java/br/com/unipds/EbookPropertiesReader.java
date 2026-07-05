@@ -4,6 +4,6 @@ import java.nio.file.Path;
 
 public interface EbookPropertiesReader {
 
-    void read(Path mdFilePath, Ebook ebook);
+    EbookProperties read(Path mdFilePath);
 
 }

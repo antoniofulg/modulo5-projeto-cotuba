@@ -23,20 +23,20 @@ import nl.siegmann.epublib.service.MediatypeService;
 @ApplicationScoped
 public class EPUBGenerator implements EbookGenerator {
     public void generate(Ebook ebook) {
-        List<Chapter> chapters = ebook.getChapters();
-        Path outputFile = ebook.getOutputFile();
+        List<Chapter> chapters = ebook.chapters();
+        Path outputFile = ebook.outputFile();
 
         try {
             var epub = new Book();
 
-            epub.getMetadata().addTitle(ebook.getTitle());
-            epub.getMetadata().addAuthor(new Author(ebook.getAuthor()));
+            epub.getMetadata().addTitle(ebook.title());
+            epub.getMetadata().addAuthor(new Author(ebook.author()));
 
             boolean[] isFirstChapter = { true };
 
             chapters.forEach(chapter -> {
-                String html = chapter.getHtml();
-                String title = chapter.getTitle();
+                String html = chapter.html();
+                String title = chapter.title();
 
                 StringWriter stringWriter = new StringWriter();
                 try {

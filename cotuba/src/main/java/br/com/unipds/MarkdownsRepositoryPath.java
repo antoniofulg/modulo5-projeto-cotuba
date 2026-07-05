@@ -12,8 +12,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class MarkdownsRepositoryPath implements MarkdownsRepository {
+
     @Override
-    public List<Chapter> find(Path mdFilePath) {
+    public List<Markdown> find(Path mdFilePath) {
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**/*.md");
         try (Stream<Path> mdStream = Files.list(mdFilePath)) {
             List<Path> mdFiles = mdStream
@@ -28,13 +29,8 @@ public class MarkdownsRepositoryPath implements MarkdownsRepository {
 
             return mdFiles.stream().map(mdFile -> {
                 try {
-
-                    var chapter = new Chapter();
-                    String markdown = Files.readString(mdFile);
-                    chapter.setMarkdown(markdown);
-                    chapter.setMarkdownPath(mdFile);
-
-                    return chapter;
+                    String content = Files.readString(mdFile);
+                    return new Markdown(content, mdFilePath);
                 } catch (IOException e) {
                     throw new IllegalStateException("Erro ao ler arquivo: " + mdFile, e);
                 }

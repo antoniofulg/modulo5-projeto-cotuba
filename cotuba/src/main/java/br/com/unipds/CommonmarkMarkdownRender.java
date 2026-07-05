@@ -14,24 +14,25 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class CommonmarkMarkdownRender implements MarkdownRender {
 
     @Override
-    public void render(List<Chapter> chapters) {
+    public List<Chapter> render(List<Markdown> markdowns) {
 
-        chapters.forEach(chapter -> {
+        return markdowns.stream().map(markdown -> {
+
+            var chapterBuilder = ChapterBuilder.builder();
+            chapterBuilder.markdown(markdown);
 
             Parser parser = Parser.builder().build();
             Node document = null;
             try {
 
-                String markdown = chapter.getMarkdown();
-
-                document = parser.parse(markdown);
+                document = parser.parse(markdown.content());
                 document.accept(new AbstractVisitor() {
                     @Override
                     public void visit(Heading heading) {
                         if (heading.getLevel() == 1) {
                             // capítulo
                             String chapterTitle = ((Text) heading.getFirstChild()).getLiteral();
-                            chapter.setTitle(chapterTitle);
+                            chapterBuilder.title(chapterTitle);
                         } else if (heading.getLevel() == 2) {
                             // seção
                         } else if (heading.getLevel() == 3) {
@@ -41,7 +42,7 @@ public class CommonmarkMarkdownRender implements MarkdownRender {
 
                 });
             } catch (Exception ex) {
-                throw new IllegalStateException("Erro ao fazer parse do arquivo " + chapter.getMarkdownPath(), ex);
+                throw new IllegalStateException("Erro ao fazer parse do arquivo " + markdown.file(), ex);
             }
 
             try {
@@ -49,12 +50,14 @@ public class CommonmarkMarkdownRender implements MarkdownRender {
                 String html = renderer.render(document);
                 ;
 
-                chapter.setHtml(html);
+                chapterBuilder.html(html);
             } catch (Exception ex) {
-                throw new IllegalStateException("Erro ao renderizar para HTML o arquivo " + chapter.getMarkdownPath(),
+                throw new IllegalStateException("Erro ao renderizar para HTML o arquivo " + markdown.file(),
                         ex);
             }
-        });
+
+            return chapterBuilder.build();
+        }).toList();
 
     }
 }

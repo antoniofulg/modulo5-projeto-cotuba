@@ -59,8 +59,6 @@ public class CLIOptionsReader {
             Path outputFile;
             boolean verboseMode = true;
 
-            CortubaParameters cortubaParameters = new CortubaParameters();
-
             String mdPathName = cmd.getOptionValue("dir");
 
             if (mdPathName != null) {
@@ -105,12 +103,7 @@ public class CLIOptionsReader {
 
             verboseMode = cmd.hasOption("verbose");
 
-            cortubaParameters.setMdFilePath(mdFilePath);
-            cortubaParameters.setFormat(format);
-            cortubaParameters.setOutputFile(outputFile);
-            cortubaParameters.setVerboseMode(verboseMode);
-
-            return cortubaParameters;
+            return new CortubaParameters(mdFilePath, format, outputFile, verboseMode);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
