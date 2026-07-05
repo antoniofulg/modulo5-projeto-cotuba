@@ -39,7 +39,7 @@ class MainIntegrationTest {
         Files.writeString(arquivoMd, "# Capítulo Teste\n\nEste é um conteúdo de um arquivo Markdown.");
 
         Path propertyFile = diretorioDosMd.resolve("ebook.properties");
-        Files.writeString(propertyFile, "cortuba.ebook.title=Book\ncortuba.ebook.author=Author");
+        Files.writeString(propertyFile, "cotuba.ebook.title=Book\ncotuba.ebook.author=Author");
     }
 
     @AfterEach

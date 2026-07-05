@@ -27,11 +27,11 @@ public class EbookFilePropertiesReader implements EbookPropertiesReader {
             throw new IllegalStateException("Erro ao ler arquivo: " + propertiesFile, e);
         }
 
-        String titleProperty = "cortuba.ebook.title";
+        String titleProperty = "cotuba.ebook.title";
         String title = properties.getProperty(titleProperty);
         validateProperty(title, titleProperty);
 
-        String authorProperty = "cortuba.ebook.author";
+        String authorProperty = "cotuba.ebook.author";
         String author = properties.getProperty(authorProperty);
         validateProperty(author, authorProperty);
 
