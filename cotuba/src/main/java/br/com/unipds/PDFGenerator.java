@@ -16,10 +16,9 @@ import com.itextpdf.layout.element.IElement;
 import com.itextpdf.layout.properties.AreaBreakType;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 
+@EbookFormatQualifier(EbookFormat.PDF)
 @ApplicationScoped
-@Named("PDFGenerator")
 public class PDFGenerator implements EbookGenerator {
     @Override
     public void generate(Ebook ebook) {
