@@ -15,8 +15,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class HTMLGenerator implements EbookGenerator {
 
     @Override
-    public void generate(Ebook ebook) {
-        Path outputFile = ebook.outputFile();
+    public void generate(Ebook ebook, Path outputFile) {
         try {
             Path htmlDirectory = Files.createDirectory(outputFile);
 

@@ -42,7 +42,7 @@ public class CommonmarkMarkdownRender implements MarkdownRender {
 
                 });
             } catch (Exception ex) {
-                throw new IllegalStateException("Erro ao fazer parse do arquivo " + markdown.file(), ex);
+                throw new IllegalStateException("Erro ao fazer parse do arquivo " + markdown.name(), ex);
             }
 
             try {
@@ -52,7 +52,7 @@ public class CommonmarkMarkdownRender implements MarkdownRender {
 
                 chapterBuilder.html(html);
             } catch (Exception ex) {
-                throw new IllegalStateException("Erro ao renderizar para HTML o arquivo " + markdown.file(),
+                throw new IllegalStateException("Erro ao renderizar para HTML o arquivo " + markdown.name(),
                         ex);
             }
 

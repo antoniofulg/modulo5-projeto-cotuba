@@ -30,7 +30,8 @@ public class MarkdownsRepositoryPath implements MarkdownsRepository {
             return mdFiles.stream().map(mdFile -> {
                 try {
                     String content = Files.readString(mdFile);
-                    return new Markdown(content, mdFilePath);
+                    String name = mdFile.getFileName().toString();
+                    return new Markdown(name, content);
                 } catch (IOException e) {
                     throw new IllegalStateException("Erro ao ler arquivo: " + mdFile, e);
                 }

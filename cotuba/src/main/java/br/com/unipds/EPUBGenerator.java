@@ -22,9 +22,8 @@ import nl.siegmann.epublib.service.MediatypeService;
 @EbookFormatQualifier(EbookFormat.EPUB)
 @ApplicationScoped
 public class EPUBGenerator implements EbookGenerator {
-    public void generate(Ebook ebook) {
+    public void generate(Ebook ebook, Path outputFile) {
         List<Chapter> chapters = ebook.chapters();
-        Path outputFile = ebook.outputFile();
 
         try {
             var epub = new Book();

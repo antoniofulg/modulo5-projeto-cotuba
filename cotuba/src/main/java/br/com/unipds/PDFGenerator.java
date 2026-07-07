@@ -21,9 +21,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PDFGenerator implements EbookGenerator {
     @Override
-    public void generate(Ebook ebook) {
+    public void generate(Ebook ebook, Path outputFile) {
         List<Chapter> chapters = ebook.chapters();
-        Path outputFile = ebook.outputFile();
 
         try (var writer = new PdfWriter(Files.newOutputStream(outputFile));
                 var pdf = new PdfDocument(writer);
