@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.adapters.out.md;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -8,6 +8,8 @@ import java.nio.file.PathMatcher;
 import java.util.List;
 import java.util.stream.Stream;
 
+import br.com.unipds.cotuba.domain.Markdown;
+import br.com.unipds.cotuba.ports.out.MarkdownsRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped

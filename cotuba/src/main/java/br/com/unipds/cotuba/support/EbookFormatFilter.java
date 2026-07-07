@@ -1,5 +1,6 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.support;
 
+import br.com.unipds.cotuba.domain.EbookFormat;
 import jakarta.enterprise.util.AnnotationLiteral;
 
 public class EbookFormatFilter extends AnnotationLiteral<EbookFormatQualifier> implements EbookFormatQualifier {
@@ -15,7 +16,7 @@ public class EbookFormatFilter extends AnnotationLiteral<EbookFormatQualifier> i
         return format;
     }
 
-    static EbookFormatFilter of(EbookFormat format) {
+    public static EbookFormatFilter of(EbookFormat format) {
         return new EbookFormatFilter(format);
     }
 }

@@ -1,8 +1,9 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.cli;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
+
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.epub.EpubReader;
 import org.junit.jupiter.api.AfterEach;
@@ -53,7 +54,7 @@ class MainIntegrationTest {
     void deveGerarPdfComSucesso() throws Exception {
         Path arquivoSaida = diretorioDosMd.resolve("saida.pdf");
 
-        int exitCode = new Main().executar(new String[] {
+        int exitCode = new Main().execute(new String[] {
                 "-d", diretorioDosMd.toString(),
                 "-f", "pdf",
                 "-o", arquivoSaida.toString()
@@ -75,7 +76,7 @@ class MainIntegrationTest {
     void deveGerarEpubComSucesso() throws Exception {
         Path arquivoSaida = diretorioDosMd.resolve("saida.epub");
 
-        int exitCode = new Main().executar(new String[] {
+        int exitCode = new Main().execute(new String[] {
                 "-d", diretorioDosMd.toString(),
                 "-f", "epub",
                 "-o", arquivoSaida.toString()
@@ -100,7 +101,7 @@ class MainIntegrationTest {
     void deveFalharEEncerrarQuandoFormatoEhInvalido() {
         Path arquivoSaida = diretorioDosMd.resolve("saida.mobi");
 
-        int exitCode = new Main().executar(new String[] {
+        int exitCode = new Main().execute(new String[] {
                 "-d", diretorioDosMd.toString(),
                 "-f", "mobi",
                 "-o", arquivoSaida.toString()
@@ -117,7 +118,7 @@ class MainIntegrationTest {
         Files.deleteIfExists(arquivoMd); // Deleta o arquivo para simular diretório vazio
         Path arquivoSaida = diretorioDosMd.resolve("saida.pdf");
 
-        int exitCode = new Main().executar(new String[] {
+        int exitCode = new Main().execute(new String[] {
                 "-d", diretorioDosMd.toString(),
                 "-f", "pdf",
                 "-o", arquivoSaida.toString(),
@@ -131,7 +132,7 @@ class MainIntegrationTest {
     @Test
     @DisplayName("Deve acionar a ajuda do CLI e encerrar em caso de argumento desconhecido")
     void deveAcionarAjudaEEncerrarAoPassarArgumentoInvalido() {
-        int exitCode = new Main().executar(new String[] {
+        int exitCode = new Main().execute(new String[] {
                 "-x"
         });
 

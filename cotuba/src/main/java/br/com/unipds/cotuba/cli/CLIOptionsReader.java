@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.cli;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.help.HelpFormatter;
 
+import br.com.unipds.cotuba.domain.EbookFormat;
+import br.com.unipds.cotuba.dto.CotubaParameters;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped

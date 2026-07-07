@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.adapters.out.md;
 
 import java.util.List;
 import org.commonmark.node.AbstractVisitor;
@@ -8,6 +8,10 @@ import org.commonmark.node.Text;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import br.com.unipds.cotuba.domain.ChapterBuilder;
+import br.com.unipds.cotuba.domain.Chapter;
+import br.com.unipds.cotuba.domain.Markdown;
+import br.com.unipds.cotuba.ports.out.MarkdownRender;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped

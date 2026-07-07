@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.domain;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 @AggregateRoot
 @RecordBuilder
 public record Ebook(
-        @Identity String title,
-        String author,
-        EbookFormat format,
-        List<Chapter> chapters) {
+                @Identity String title,
+                String author,
+                EbookFormat format,
+                List<Chapter> chapters) {
 }

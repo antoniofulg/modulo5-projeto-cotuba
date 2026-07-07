@@ -1,18 +1,20 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.cli;
 
+import br.com.unipds.cotuba.application.CotubaService;
+import br.com.unipds.cotuba.dto.CotubaParameters;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 
 public class Main {
 
     void main(String[] args) {
-        int exitCode = executar(args);
+        int exitCode = execute(args);
         if (exitCode != 0) {
             System.exit(exitCode);
         }
     }
 
-    int executar(String[] args) {
+    int execute(String[] args) {
         boolean verboseMode = true;
 
         try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {

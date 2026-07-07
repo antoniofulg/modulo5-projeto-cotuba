@@ -1,6 +1,8 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.dto;
 
 import java.nio.file.Path;
+
+import br.com.unipds.cotuba.domain.EbookFormat;
 
 public record CotubaParameters(
         Path mdFilePath,

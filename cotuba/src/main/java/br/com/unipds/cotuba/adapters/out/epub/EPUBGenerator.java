@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.adapters.out.epub;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,6 +11,11 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import br.com.unipds.cotuba.domain.Chapter;
+import br.com.unipds.cotuba.domain.Ebook;
+import br.com.unipds.cotuba.domain.EbookFormat;
+import br.com.unipds.cotuba.ports.out.EbookGenerator;
+import br.com.unipds.cotuba.support.EbookFormatQualifier;
 import jakarta.enterprise.context.ApplicationScoped;
 import nl.siegmann.epublib.domain.Author;
 import nl.siegmann.epublib.domain.Book;

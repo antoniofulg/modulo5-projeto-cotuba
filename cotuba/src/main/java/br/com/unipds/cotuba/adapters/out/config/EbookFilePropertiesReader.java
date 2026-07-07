@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.adapters.out.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+import br.com.unipds.cotuba.dto.EbookProperties;
+import br.com.unipds.cotuba.ports.out.EbookPropertiesReader;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped

@@ -1,4 +1,4 @@
-package br.com.unipds;
+package br.com.unipds.cotuba.adapters.out.html;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +8,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import br.com.unipds.cotuba.domain.Chapter;
+import br.com.unipds.cotuba.domain.Ebook;
+import br.com.unipds.cotuba.domain.EbookFormat;
+import br.com.unipds.cotuba.ports.out.EbookGenerator;
+import br.com.unipds.cotuba.support.EbookFormatQualifier;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @EbookFormatQualifier(EbookFormat.HTML)
