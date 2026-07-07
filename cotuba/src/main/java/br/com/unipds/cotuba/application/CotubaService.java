@@ -12,6 +12,7 @@ import br.com.unipds.cotuba.domain.EbookFormat;
 import br.com.unipds.cotuba.domain.Markdown;
 import br.com.unipds.cotuba.dto.CotubaParameters;
 import br.com.unipds.cotuba.dto.EbookProperties;
+import br.com.unipds.cotuba.ports.in.CotubaUseCase;
 import br.com.unipds.cotuba.ports.out.EbookGenerator;
 import br.com.unipds.cotuba.ports.out.EbookPropertiesReader;
 import br.com.unipds.cotuba.ports.out.MarkdownRender;
@@ -24,7 +25,7 @@ import jakarta.inject.Inject;
 
 @Service
 @ApplicationScoped
-public class CotubaService {
+public class CotubaService implements CotubaUseCase {
 
     private final MarkdownRender markdownRender;
     private final EbookPropertiesReader ebookPropertiesReader;
@@ -40,6 +41,7 @@ public class CotubaService {
         this.ebookGenerators = ebookGenerators;
     }
 
+    @Override
     public void execute(CotubaParameters cotubaParameters) {
 
         Path mdFilePath = cotubaParameters.mdFilePath();
