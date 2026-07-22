@@ -1,6 +1,8 @@
 package br.com.unipds.cotuba.adapters.out.md;
 
 import java.util.List;
+import java.util.ServiceLoader;
+
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.Heading;
 import org.commonmark.node.Node;
@@ -11,6 +13,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import br.com.unipds.cotuba.domain.ChapterBuilder;
 import br.com.unipds.cotuba.domain.Chapter;
 import br.com.unipds.cotuba.domain.Markdown;
+import br.com.unipds.cotuba.plugins.CotubaPlugin;
 import br.com.unipds.cotuba.ports.out.MarkdownRender;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -52,7 +55,14 @@ public class CommonmarkMarkdownRender implements MarkdownRender {
             try {
                 HtmlRenderer renderer = HtmlRenderer.builder().build();
                 String html = renderer.render(document);
-                ;
+
+                for (CotubaPlugin plugin : ServiceLoader.load(CotubaPlugin.class)) {
+                    String processedHtml = plugin.afterRendering(html);
+
+                    if (processedHtml != null && !processedHtml.isBlank()) {
+                        html = processedHtml;
+                    }
+                }
 
                 chapterBuilder.html(html);
             } catch (Exception ex) {
